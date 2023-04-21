@@ -48,13 +48,19 @@
         <dependency>
             <groupId>com.westsecu.inf</groupId>
             <artifactId>westsecu-feign</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.cloud</groupId>
+                    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Feign -->
         <!-- Config -->
-        <dependency>
-            <groupId>com.westsecu.inf</groupId>
-            <artifactId>westsecu-config</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.westsecu.inf</groupId>-->
+<!--            <artifactId>westsecu-config</artifactId>-->
+<!--        </dependency>-->
         <!-- Config -->
         <!-- Kafka -->
         <dependency>
@@ -65,6 +71,12 @@
         <dependency>
             <groupId>com.westsecu.inf</groupId>
             <artifactId>westsecu-executor</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.cloud</groupId>
+                    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Job-->
         <dependency>
@@ -99,6 +111,34 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.83</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2.2.1.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>2.2.1.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>1.2.1</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

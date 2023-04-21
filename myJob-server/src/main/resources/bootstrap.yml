@@ -3,12 +3,12 @@ server:
 
 spring:
   application:
-    name: ficc # 应用名称
+    name: lc-backend # 应用名称
   profiles:
     active: backend # 默认生效dev环境
   datasource: # 数据源配置
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/mysql?characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3309/mysql?characterEncoding=utf8&serverTimezone=UTC
     username: root
     password: 123456
     hikari: # https://github.com/brettwooldridge/HikariCP
@@ -27,15 +27,15 @@ spring:
     nacos:
       discovery:
         enabled: true
-        server-addr: https://crm-nacos-dev.westresearch.west95582.com
+        server-addr: http://192.168.200.161:32351
         namespace: d09b7832-db81-4582-93c1-4371e91d9ed1
+        group: LIUCHANG_GROUP
       config:
         enabled: true
-        server-addr: https://crm-nacos-dev.westresearch.west95582.com
+        server-addr: http://192.168.200.161:32351
         file-extension: yaml
-        prefix: ficc
         namespace: d09b7832-db81-4582-93c1-4371e91d9ed1
-        group: DEFAULT_GROUP
+        group: LIUCHANG_GROUP
         # 应用的默认配置是${spring.application.name}.yaml, 命名空间是${spring.profiles.active}, 所属的Group是${spring.application.name}
 #        extension-configs: # 如无扩展配置可不进行配置
 #          - data-id: other.yaml # 扩展的配置
