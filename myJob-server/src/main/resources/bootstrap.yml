@@ -1,0 +1,130 @@
+server:
+  port: 10086
+
+spring:
+  application:
+    name: ficc # 应用名称
+  profiles:
+    active: backend # 默认生效dev环境
+  datasource: # 数据源配置
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/mysql?characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    hikari: # https://github.com/brettwooldridge/HikariCP
+      # 连接只读数据库时配置为true， 保证安全
+      read-only: false
+      # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒
+      connection-timeout: 30000
+      # 连接池中允许的最大连接数。缺省值：10
+      minimum-idle: 2
+      maximum-pool-size: 10
+      # 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟
+      idle-timeout: 600000
+      # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒
+      max-lifetime: 1800000
+  cloud: # 应用配置
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: https://crm-nacos-dev.westresearch.west95582.com
+        namespace: d09b7832-db81-4582-93c1-4371e91d9ed1
+      config:
+        enabled: true
+        server-addr: https://crm-nacos-dev.westresearch.west95582.com
+        file-extension: yaml
+        prefix: ficc
+        namespace: d09b7832-db81-4582-93c1-4371e91d9ed1
+        group: DEFAULT_GROUP
+        # 应用的默认配置是${spring.application.name}.yaml, 命名空间是${spring.profiles.active}, 所属的Group是${spring.application.name}
+#        extension-configs: # 如无扩展配置可不进行配置
+#          - data-id: other.yaml # 扩展的配置
+#            group: ${spring.application.name} # 配置所属的组必须是应用名称
+#            refresh: true
+
+### 线程池相关配置
+executors:
+  enabled: true
+  configs:
+    - # 定时任务共用线程池 可以是多个 要求名称不能相同
+      name: syncDataExecutor
+      # 线程池固定线程数,即使他们空闲也不会被回收,默认cpu个数
+      corePoolSize: 1
+      # 线程池最大线程数,默认4
+      maximumPoolSize: 8
+      # 允许最大空闲时间,单位毫秒
+      keepAlive: 10000
+      # 队列长度,默认0,会实现为linkedblockingqueue
+      queueSize: 1000
+      # 拒绝策略,默认直接丢弃
+      # A ThreadPoolExecutor.AbortPolicy();
+      # C ThreadPoolExecutor.CallerRunsPolicy();
+      # D ThreadPoolExecutor.DiscardPolicy();
+      #  自定义拒绝策略 例：com.aa.bb.MyPolicy
+      policy: D
+
+### Kafka相关配置
+kafka:
+  enabled: true
+  producers:
+    - name: createBookTopic
+      bootstrap-servers: localhost:9092
+  consumers:
+    - name: concurrentConsumer
+      bootstrap-servers: localhost:9092
+      max-poll-records: 10
+      enable-auto-commit: false
+      listener:
+        type: batch
+        concurrency: 3
+        ack-mode: manual
+    - name: singleConsumer
+      bootstrap-servers: localhost:9092
+      max-poll-records: 10
+      enable-auto-commit: false
+      listener:
+        type: batch
+        concurrency: 1
+        ack-mode: manual
+
+### XXL-JOB相关配置
+job:
+  enabled: false
+  adminAddresses: http://127.0.0.1:8080/xxl-job-admin
+
+### Redis相关配置
+redis:
+  enabled: true
+  items:
+    - clientName: standaloneTemplate
+      enableDistributed: true # 是否开启分布式特性
+      distributedConfigFile: redisson.yml
+      host: localhost
+      port: 49153
+      database: 0
+      timeout: 3000 # 读超时时间
+      connectTimeout: 3000 # 连接超时时间
+      shutdownTimeout: 100 # 在关闭客户端连接之前等待任务处理完成的最长时间，在这之后，无论任务是否执行完成，都会被执行器关闭
+      pool:
+        enabled: true
+        maxActive: 4 # 连接池最大连接数（使用负值表示没有限制）
+        maxIdle: 4 # 连接池中的最大空闲连接
+        minIdle: 1 # 连接池中的最小空闲连接
+        maxWait: 1000 #连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
+        timeBetweenEvictionRuns: 30000 # 默认-1
+#    - clientName: clusterTemplate
+#      enableDistributed: false # 是否开启分布式特性
+#      database: 0
+#      password: 123456
+#      timeout: 3000 # 读超时时间
+#      connectTimeout: 3000 # 连接超时时间
+#      shutdownTimeout: 100 # 在关闭客户端连接之前等待任务处理完成的最长时间，在这之后，无论任务是否执行完成，都会被执行器关闭
+#      cluster:
+#        nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006
+#      pool:
+#        enabled: true
+#        maxActive: 4 # 连接池最大连接数（使用负值表示没有限制）
+#        maxIdle: 4 # 连接池中的最大空闲连接
+#        minIdle: 1 # 连接池中的最小空闲连接
+#        maxWait: 1000 #连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
+#        timeBetweenEvictionRuns: 30000 # 默认-1

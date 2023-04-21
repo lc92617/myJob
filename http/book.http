@@ -1,0 +1,64 @@
+# Sample示例项目API测试
+# https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html
+
+### 根据ID查询图书信息
+POST {{host}}//feign/book/get
+Content-Type: application/json
+x-trace-o-source-app: localtest
+x-trace-o-source-host: 127.0.0.1
+
+{
+  "id": 10
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.log("code: " + response.body.code);
+        client.log("message: " + response.body.message);
+        client.assert(response.body.code === 0, "按照ID查询图书信息，查询异常");
+        client.assert(response.body.data.id === 10, "按照ID查询图书信息，数据不存在");
+    });
+%}
+
+### 创建一本书
+POST {{host}}//feign/book/create
+Content-Type: application/json
+x-trace-o-source-app: localtest
+x-trace-o-source-host: 127.0.0.1
+
+{
+  "name": "饥饿游戏2",
+  "authorId": 10,
+  "libraryId": 1,
+  "enabled": false,
+  "stock": 10000
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.log("code: " + response.body.code);
+        client.log("message: " + response.body.message);
+        client.assert(response.body.code === 0, "创建图书异常");
+    });
+%}
+
+### 分页查询图书信息
+POST {{host}}//feign/book/query
+Content-Type: application/json
+x-trace-o-source-app: client
+x-trace-o-source-host: client-01
+
+{
+  "pager": {
+    "pageNum": 2,
+    "pageSize": 5
+  }
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.log("code: " + response.body.code);
+        client.log("message: " + response.body.message);
+        client.assert(response.body.code === 0, "分页查询数据异常");
+    });
+%}
