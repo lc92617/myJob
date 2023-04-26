@@ -8,9 +8,9 @@ spring:
     active: backend # 默认生效dev环境
   datasource: # 数据源配置
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3309/mysql?characterEncoding=utf8&serverTimezone=UTC
-    username: root
-    password: 123456
+    url: jdbc:mysql://localhost:3306/mysql?characterEncoding=utf8&serverTimezone=UTC
+    username: dev
+    password: 111111
     hikari: # https://github.com/brettwooldridge/HikariCP
       # 连接只读数据库时配置为true， 保证安全
       read-only: false

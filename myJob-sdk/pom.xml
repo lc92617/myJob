@@ -21,16 +21,21 @@
     <!--  Feign SDK 会提供给其它的依赖系统使用，依赖要尽量简洁  -->
     <dependencies>
         <dependency>
+            <groupId>com.westsecu.inf</groupId>
+            <artifactId>westsecu-base</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.westsecu.inf</groupId>
-            <artifactId>westsecu-base</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
     </dependencies>
 
